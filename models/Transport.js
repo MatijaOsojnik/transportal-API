@@ -37,5 +37,5 @@ const TransportSchema = new mongoose.Schema({
     }
 })
 
-const model = mongoose.model('Transport', TransportSchema)
-export default model
+const Transport = mongoose.model('Transport', TransportSchema)
+module.exports = Transport

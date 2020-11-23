@@ -13,5 +13,5 @@ const TransportUserSchema = new mongoose.Schema({
     }
 })
 
-const model = mongoose.model('TransportUser', TransportUserSchema)
-export default model
+const TransportUser = mongoose.model('TransportUser', TransportUserSchema)
+module.exports = TransportUser
