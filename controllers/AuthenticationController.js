@@ -1,11 +1,10 @@
-const {
-    User,
-} = require('../models');
-
-const axios = require('axios')
+const User = require('../models/User')
 
 const jwt = require('jsonwebtoken');
-const config = require('../config')
+const bcrypt = require('bcrypt');
+const {
+    validationResult
+} = require("express-validator");
 
 function jwtSignUser(user) {
     return jwt.sign({
@@ -16,65 +15,126 @@ function jwtSignUser(user) {
 }
 
 module.exports = {
-    async register(req, res) {
+
+    async register (req, res)  {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
+
+        const {
+            name,
+            surname,
+            email,
+            password,
+        } = req.body;
         try {
-            await User.create({
-                    display_name: req.body.display_name,
-                    email: req.body.email,
-                    password: req.body.password,
-                    repeat_password: req.body.repeat_password
-                })
-                .then((user) => {
-                    if (req.body.roles) {
-                        Role.findAll({
-                            where: {
-                                name: {
-                                    [Op.or]: req.body.roles
-                                }
-                            }
-                        }).then(roles => {
-                            user.setRoles(roles).then(async () => {
-                                const authorities = []
+            let user = await User.findOne({
+                email
+            });
+            if (user) {
+                return res.status(400).json({
+                    msg: "User Already Exists"
+                });
+            }
 
-                                const roles = await user.getRoles()
-                                for (let i = 0; i < roles.length; i++) {
-                                    authorities.push("ROLE_" + roles[i].name.toUpperCase());
-                                }
+            user = new User({
+                name,
+                surname,
+                email,
+                password
+            });
 
-                                const userJson = user.toJSON();
-                                res.send({
-                                    authorities: authorities,
-                                    user: user,
-                                    token: jwtSignUser(userJson)
-                                })
-                            });
-                        });
-                    } else {
-                        user.setRoles([1]).then(async () => {
-                            const authorities = []
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
 
-                            const roles = await user.getRoles()
-                            for (let i = 0; i < roles.length; i++) {
-                                authorities.push("ROLE_" + roles[i].name.toUpperCase());
-                            }
+            await user.save();
 
-                            const userJson = user.toJSON();
-                            res.send({
-                                authorities: authorities,
-                                user: user,
-                                token: jwtSignUser(userJson)
-                            })
-                        }).catch(err => {
-                            res.status(500).send({
-                                error: err
-                            })
-                        })
-                    }
-                })
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            };
+
+            jwt.sign(
+                payload,
+                "randomString", {
+                    expiresIn: 3600
+                },
+                (err, token) => {
+                    if (err) throw err;
+                    res.status(200).json({
+                        token
+
+                    });
+                }
+            );
         } catch (err) {
-            res.status(400).send([`Email is already in use.`])
+            console.log(err.message);
+            res.status(500).send("Error in Saving");
         }
     },
+    // async register(req, res) {
+    //     try {
+    //         await User.create({
+    //                 display_name: req.body.display_name,
+    //                 email: req.body.email,
+    //                 password: req.body.password,
+    //                 repeat_password: req.body.repeat_password
+    //             })
+    //             .then((user) => {
+    //                 if (req.body.roles) {
+    //                     Role.findAll({
+    //                         where: {
+    //                             name: {
+    //                                 [Op.or]: req.body.roles
+    //                             }
+    //                         }
+    //                     }).then(roles => {
+    //                         user.setRoles(roles).then(async () => {
+    //                             const authorities = []
+
+    //                             const roles = await user.getRoles()
+    //                             for (let i = 0; i < roles.length; i++) {
+    //                                 authorities.push("ROLE_" + roles[i].name.toUpperCase());
+    //                             }
+
+    //                             const userJson = user.toJSON();
+    //                             res.send({
+    //                                 authorities: authorities,
+    //                                 user: user,
+    //                                 token: jwtSignUser(userJson)
+    //                             })
+    //                         });
+    //                     });
+    //                 } else {
+    //                     user.setRoles([1]).then(async () => {
+    //                         const authorities = []
+
+    //                         const roles = await user.getRoles()
+    //                         for (let i = 0; i < roles.length; i++) {
+    //                             authorities.push("ROLE_" + roles[i].name.toUpperCase());
+    //                         }
+
+    //                         const userJson = user.toJSON();
+    //                         res.send({
+    //                             authorities: authorities,
+    //                             user: user,
+    //                             token: jwtSignUser(userJson)
+    //                         })
+    //                     }).catch(err => {
+    //                         res.status(500).send({
+    //                             error: err
+    //                         })
+    //                     })
+    //                 }
+    //             })
+    //     } catch (err) {
+    //         res.status(400).send([`Email is already in use.`])
+    //     }
+    // },
     async login(req, res) {
         try {
             const {
