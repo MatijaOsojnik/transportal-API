@@ -9,7 +9,10 @@ const AuthenticationController = require('../controllers/AuthenticationControlle
 router.post(
     "/signup",
     [
-        check("username", "Please Enter a Valid Username")
+        check("name", "Please Enter a Valid Username")
+        .not()
+        .isEmpty(),
+        check("surname", "Please Enter a Valid Username")
         .not()
         .isEmpty(),
         check("email", "Please enter a valid email").isEmail(),
