@@ -6,6 +6,8 @@ const router = express.Router();
 
 const AuthenticationController = require('../controllers/AuthenticationController')
 
+const auth = require('../middleware/auth')
+
 router.post(
     "/signup",
     [
@@ -33,5 +35,7 @@ router.post(
         ],
         AuthenticationController.login
 )
+
+router.get("/me", auth, AuthenticationController.getUser);
 
 module.exports = router;
