@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require("express");
 const _ = require("lodash");
 const mongoose = require("mongoose");
+var cors = require('cors')
 
 const user = require('./routes/user')
 
@@ -14,6 +15,7 @@ mongoose.connect(process.env.MONGODB_URL, {
 });
 
 const app = express();
+app.use(cors())
 
 app.use(express.urlencoded({
     extended: true

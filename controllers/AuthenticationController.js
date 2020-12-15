@@ -96,13 +96,13 @@ module.exports = {
                 });
                 if (!user)
                     return res.status(400).json({
-                        message: "User Not Exist"
+                        message: "User with that email doesn't exist."
                     });
 
                 const isMatch = await bcrypt.compare(password, user.password);
                 if (!isMatch)
                     return res.status(400).json({
-                        message: "Incorrect Password !"
+                        message: "Incorrect Password."
                     });
 
                 const payload = {

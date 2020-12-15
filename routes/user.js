@@ -9,7 +9,7 @@ const AuthenticationController = require('../controllers/AuthenticationControlle
 const auth = require('../middleware/auth')
 
 router.post(
-    "/signup",
+    "/register",
     [
         check("name", "Please Enter a Valid Username")
         .not()
