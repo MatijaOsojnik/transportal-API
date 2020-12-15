@@ -7,7 +7,7 @@ const TransportSchema = new mongoose.Schema({
     },
     departure_city_id: {
         type: mongoose.Types.ObjectId,
-        ref: 'Cities',
+        ref: 'City',
         required: true
     },
     arrival_time: {
@@ -16,15 +16,15 @@ const TransportSchema = new mongoose.Schema({
     },
     arrival_city_id: {
         type: mongoose.Types.ObjectId,
-        ref: 'Cities',
+        ref: 'City',
         required: true,
     },
     car_id: {
         type: mongoose.Types.ObjectId,
-        ref: 'Cars'
+        ref: 'Car'
     },
     price: {
-        type: Float32Array,
+        type: Number,
         required: true
     },
     passengers: {
@@ -34,7 +34,13 @@ const TransportSchema = new mongoose.Schema({
     passenger_package: {
         type: Number,
         required: true
-    }
+    },
+    users: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        }
+    ]
 })
 
 const Transport = mongoose.model('Transport', TransportSchema)

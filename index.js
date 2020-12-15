@@ -10,6 +10,7 @@ const passportMiddleware = require('./middleware/passport')
 const config = require('./config/config')
 
 const user = require('./routes/user')
+const transport = require('./routes/transport')
 
 mongoose.connect(config.db, {
     useNewUrlParser: true,
@@ -31,6 +32,7 @@ app.use(express.urlencoded({
 app.use(express.json());
 
 app.use("/user", user);
+app.use("/transport", transport)
 
 app.listen(3000, () => {
     console.log("Server started on port 3000");

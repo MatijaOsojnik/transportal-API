@@ -39,8 +39,6 @@ router.post(
 
 router.get("/me", passport.authenticate('jwt', {
     session: false
-}), function (req, res) {
-    res.status(200).json({msg: 'WORKS'})
-});
+}), AuthenticationController.getUser);
 
 module.exports = router;
