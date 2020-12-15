@@ -6,7 +6,8 @@ const router = express.Router();
 
 const AuthenticationController = require('../controllers/AuthenticationController')
 
-const auth = require('../middleware/auth')
+const passport = require('passport')
+
 
 router.post(
     "/register",
@@ -36,6 +37,10 @@ router.post(
         AuthenticationController.login
 )
 
-router.get("/me", auth, AuthenticationController.getUser);
+router.get("/me", passport.authenticate('jwt', {
+    session: false
+}), function (req, res) {
+    res.send(req.user.name);
+});
 
 module.exports = router;
