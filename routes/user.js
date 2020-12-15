@@ -40,7 +40,7 @@ router.post(
 router.get("/me", passport.authenticate('jwt', {
     session: false
 }), function (req, res) {
-    res.send(req.user.name);
+    res.status(200).json({msg: 'WORKS'})
 });
 
 module.exports = router;
