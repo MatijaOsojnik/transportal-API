@@ -10,6 +10,8 @@ router.get("/", TransportController.all)
 
 router.post("/", TransportController.post)
 
-router.put("/", )
+// router.put("/", TransportController.put)
+
+// router.delete("/",  TransportController.delete)
 
 module.exports = router;

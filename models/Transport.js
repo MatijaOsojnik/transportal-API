@@ -1,8 +1,9 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
 
 const TransportSchema = new mongoose.Schema({
     departure_time: {
-        type: String,
+        type: Date,
         required: true,
     },
     departure_city_id: {
@@ -11,7 +12,7 @@ const TransportSchema = new mongoose.Schema({
         required: true
     },
     arrival_time: {
-        type: String,
+        type: Date,
         required: true,
     },
     arrival_city_id: {

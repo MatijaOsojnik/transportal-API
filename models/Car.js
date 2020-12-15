@@ -1,4 +1,5 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
 
 const CarSchema = new mongoose.Schema({
     registration_number: {
@@ -7,12 +8,12 @@ const CarSchema = new mongoose.Schema({
     },
     color_id: {
         type: mongoose.Types.ObjectId,
-        ref: 'Barve'
+        ref: 'Color'
     },
-        model_id: {
-            type: mongoose.Types.ObjectId,
-            ref: 'Models'
-        }
+    model_id: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Model'
+    }
 })
 
 const Car = mongoose.model('Car', CarSchema)

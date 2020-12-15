@@ -1,4 +1,5 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
 
 const ModelSchema = new mongoose.Schema({
     name: {
@@ -7,7 +8,7 @@ const ModelSchema = new mongoose.Schema({
     },
     brand_id: {
         type: mongoose.Types.ObjectId,
-        ref: 'Brands'
+        ref: 'Brand'
     }
 })
 

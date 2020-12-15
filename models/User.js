@@ -24,7 +24,7 @@ const UserSchema = new Schema({
     },
      city_id: {
          type: Schema.Types.ObjectId,
-         ref: 'Cities'
+         ref: 'City'
      },
 })
 
