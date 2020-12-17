@@ -9,9 +9,6 @@ const passportMiddleware = require('./middleware/passport')
 
 const config = require('./config/config')
 
-const user = require('./routes/user')
-const transport = require('./routes/transport')
-
 mongoose.connect(config.db, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -31,8 +28,17 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 
+const user = require('./routes/user')
+const transport = require('./routes/transport')
+const color = require('./routes/color')
+const car = require('./routes/car')
+const city = require('./routes/city')
+
 app.use("/user", user);
 app.use("/transport", transport)
+app.use("/color", color)
+app.use("/car", car)
+app.use("/city", city)
 
 app.listen(3000, () => {
     console.log("Server started on port 3000");
