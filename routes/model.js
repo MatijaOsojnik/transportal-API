@@ -10,7 +10,7 @@ router.get("/", ModelController.all)
 
 router.post("/", ModelController.post)
 
-// router.put("/", CityController.put)
+router.get("/single", ModelController.single)
 
 // router.delete("/",  CityController.delete)
 

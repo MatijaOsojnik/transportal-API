@@ -6,22 +6,38 @@ module.exports = {
 
     async all(req, res) {
         try {
-            // const models = await Model.find().populate({
-            //     path: 'brand_id',
-            //     select: 'name'
-            // });
+            const models = await Model.find().populate({
+                path: 'brand_id',
+                select: 'name'
+            });
 
-            await Model.findOne({name: "A5"}).populate("brand").exec((err, model) => {
-                if (err) return handleError(err);
-                console.log('The brand is %s', model.brand.name);
-            })
-            
             res.json({
                 models: models
             })
         } catch (e) {
             res.send({
                 msg: "Error fetching models"
+            })
+        }
+    },
+    async single(req, res) {
+        try {
+            const {
+                name
+            } = req.body
+
+            const model = await Model.findOne({
+                name
+            }).populate("brand").exec((err, model) => {
+                if (err) return handleError(err);
+                console.log('The brand is %s', model.brand.name);
+            })
+            res.json({
+                model: model
+            })
+        } catch (e) {
+            res.send({
+                msg: "Error fetching brand"
             })
         }
     },
