@@ -6,7 +6,7 @@ const ModelSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    brand_id: {
+    brand: {
         type: mongoose.Types.ObjectId,
         ref: 'Brand'
     }

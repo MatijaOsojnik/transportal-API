@@ -33,12 +33,16 @@ const transport = require('./routes/transport')
 const color = require('./routes/color')
 const car = require('./routes/car')
 const city = require('./routes/city')
+const model = require('./routes/model')
+const brand = require('./routes/brand')
 
 app.use("/user", user);
 app.use("/transport", transport)
 app.use("/color", color)
 app.use("/car", car)
 app.use("/city", city)
+app.use("/model", model)
+app.use("/brand", brand)
 
 app.listen(3000, () => {
     console.log("Server started on port 3000");
