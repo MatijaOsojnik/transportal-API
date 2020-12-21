@@ -6,7 +6,7 @@ const TransportSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    departure_city_id: {
+    departure_city: {
         type: mongoose.Types.ObjectId,
         ref: 'City',
         required: true
@@ -15,12 +15,12 @@ const TransportSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    arrival_city_id: {
+    arrival_city: {
         type: mongoose.Types.ObjectId,
         ref: 'City',
         required: true,
     },
-    car_id: {
+    car: {
         type: mongoose.Types.ObjectId,
         ref: 'Car'
     },

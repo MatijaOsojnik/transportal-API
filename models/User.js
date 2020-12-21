@@ -22,7 +22,7 @@ const UserSchema = new Schema({
         type: String,
         required: false,
     },
-     city_id: {
+     city: {
          type: Schema.Types.ObjectId,
          ref: 'City'
      },

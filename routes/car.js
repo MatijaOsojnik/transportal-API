@@ -8,7 +8,7 @@ const CarController = require('../controllers/CarController')
 
 router.get("/", CarController.all)
 
-// router.post("/", CarController.post)
+router.post("/", CarController.post)
 
 // router.put("/", CarController.put)
 
