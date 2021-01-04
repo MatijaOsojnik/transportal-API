@@ -50,9 +50,6 @@ module.exports = {
                 car
             } = req.body;
 
-            console.log(req.headers)
-
-
             const newCar = new Car({
                 registration_number: car.registration_number,
                 color: car.color,
