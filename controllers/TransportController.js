@@ -37,9 +37,6 @@ module.exports = {
                 model: car.model
             })
 
-            console.log(req.user._id)
-            console.log(newCar)
-
             await newCar.save()
 
             const transport = new Transport({
@@ -51,7 +48,7 @@ module.exports = {
                 price,
                 passengers,
                 passenger_package,
-                users: req.user._id
+                users: [req.user.id]
             });
             
             await transport.save()
