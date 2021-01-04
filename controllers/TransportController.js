@@ -7,7 +7,15 @@ module.exports = {
 
     async all(req, res) {
         try {
-            const transports = await Transport.find();
+            const transports = await Transport.find().populate([{
+                path: 'car',
+            }, {
+                path: 'departure_city'
+            }, {
+                path: 'arrival_city'
+            }, {
+                path: 'users'
+            }]);
             res.json({
                 transports: transports
             })
