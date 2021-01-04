@@ -19,7 +19,6 @@ mongoose.connect(config.db, {
 
 const app = express();
 app.use(cors())
-
 app.use(passport.initialize())
 passport.use(passportMiddleware)
 

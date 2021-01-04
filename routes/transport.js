@@ -3,12 +3,13 @@ const {
     check
 } = require("express-validator");
 const router = express.Router();
+const passport = require('passport')
 
 const TransportController = require('../controllers/TransportController')
 
 router.get("/", TransportController.all)
 
-router.post("/", TransportController.post)
+router.post("/", passport.authenticate('jwt', {session: false}), TransportController.post)
 
 // router.put("/", TransportController.put)
 

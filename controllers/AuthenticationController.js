@@ -10,8 +10,9 @@ const config = require('../config/config')
 
 function jwtSignUser(user) {
     return jwt.sign({
-        id: user.id, email: user.email
+        id: user._id, email: user.email
     }, config.jwtSecret, {
+        subject: `${user._id}`,
         expiresIn: 3600
     })
 }

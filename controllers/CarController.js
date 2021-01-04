@@ -21,14 +21,14 @@ module.exports = {
 
             const {
                 registration_number,
-                color_id,
-                model_id
+                color,
+                model
             } = req.body;
 
             car = new Car({
                 registration_number,
-                color_id,
-                model_id
+                color,
+                model
             })
 
             res.status(200).json({
