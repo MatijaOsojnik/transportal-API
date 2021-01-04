@@ -20,34 +20,15 @@ module.exports = {
     async post(req, res) {
         try {
 
-            // const {
-            //     departure_time,
-            //     departure_city,
-            //     arrival_time,
-            //     arrival_city,
-            //     car,
-            //     price,
-            //     passengers,
-            //     passenger_package,
-            // } = req.body;
-
-            // const newCar = new Car({
-            //     registration_number: car.registration_number,
-            //     color: car.color,
-            //     model: car.model
-            // })
-
-            // console.log(req.user._id)
-            // console.log(newCar)
-
-            //             res.status(200).json({
-            //                 msg: 'Successfuly added a transport'
-            //             })
-
-            // await newCar.save()
-
             const {
-                car
+                departure_time,
+                departure_city,
+                arrival_time,
+                arrival_city,
+                car,
+                price,
+                passengers,
+                passenger_package,
             } = req.body;
 
             const newCar = new Car({
@@ -56,28 +37,28 @@ module.exports = {
                 model: car.model
             })
 
+            console.log(req.user._id)
             console.log(newCar)
-            console.log(req.user)
-
-            res.status(200).json({
-                msg: 'Successfuly added a car'
-            })
 
             await newCar.save()
 
-            // transport = new Transport({
-            //     departure_time,
-            //     departure_city,
-            //     arrival_time,
-            //     arrival_city,
-            //     car: newCar._id,
-            //     price,
-            //     passengers,
-            //     passenger_package,
-            //     users: req.user._id
-            // });
+            const transport = new Transport({
+                departure_time,
+                departure_city,
+                arrival_time,
+                arrival_city,
+                car: newCar._id,
+                price,
+                passengers,
+                passenger_package,
+                users: req.user._id
+            });
+            
+            await transport.save()
 
-            // await transport.save()
+            res.status(200).json({
+                message: "Successfuly created a new transport"
+            })
 
         } catch (e) {
             res.send({
