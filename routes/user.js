@@ -6,6 +6,7 @@ const router = express.Router();
   const  User = require('../models/User')
 
 const AuthenticationController = require('../controllers/AuthenticationController')
+const UserController = require('../controllers/UserController')
 
 const passport = require('passport')
 
@@ -61,7 +62,7 @@ router.post(
         AuthenticationController.login
 )
 
-router.get("/me", passport.authenticate("jwt", {session: false}), AuthenticationController.getUser);
+router.get("/me", passport.authenticate("jwt", {session: false}), UserController.getUser);
 // router.get("/me", passport.authenticate("jwt", {session: false}), (req, res) => {
 //     res.send("HI!")
 // })
