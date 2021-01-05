@@ -9,9 +9,12 @@ const TransportController = require('../controllers/TransportController')
 
 router.get("/", TransportController.all)
 
+router.get("/:id", TransportController.single)
+
 router.post("/", passport.authenticate("jwt", {
     session: false
 }), TransportController.post)
+
 
 // router.put("/", TransportController.put)
 

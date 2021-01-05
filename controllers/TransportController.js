@@ -25,6 +25,29 @@ module.exports = {
             })
         }
     },
+
+    async single(req, res) {
+        try {
+                    const transportId = req.params.id
+                    const transport = await Transport.findById(transportId).populate([{
+                        path: 'car',
+                    }, {
+                        path: 'departure_city'
+                    }, {
+                        path: 'arrival_city'
+                    }, {
+                        path: 'users'
+                    }]);
+                    res.status(200).json({
+                        transport: transport
+                    })
+        } catch (error) {
+                        res.send({
+                            msg: "Error fetching transport"
+                        })
+        }
+    },
+
     async post(req, res) {
         try {
 
@@ -58,7 +81,7 @@ module.exports = {
                 passenger_package,
                 users: [req.user.id]
             });
-            
+
             await transport.save()
 
             res.status(200).json({
