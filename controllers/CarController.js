@@ -22,13 +22,15 @@ module.exports = {
             const {
                 registration_number,
                 color,
-                model
+                model,
+                brand
             } = req.body;
 
             car = new Car({
                 registration_number,
                 color,
-                model
+                model,
+                brand
             })
 
             res.status(200).json({

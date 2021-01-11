@@ -16,7 +16,7 @@ router.post("/", passport.authenticate("jwt", {
 }), TransportController.post)
 
 
-// router.put("/", TransportController.put)
+router.put("/:id", TransportController.put)
 
 // router.delete("/",  TransportController.delete)
 

@@ -65,7 +65,8 @@ module.exports = {
             const newCar = new Car({
                 registration_number: car.registration_number,
                 color: car.color,
-                model: car.model
+                model: car.model,
+                brand: car.brand,
             })
 
             await newCar.save()
@@ -94,7 +95,7 @@ module.exports = {
             });
         }
     },
-    async update(req, res) {
+    async put(req, res) {
         try {
             const {
                 departure_time,
@@ -107,7 +108,15 @@ module.exports = {
                 passenger_package,
             } = req.body;
 
-            const updatedCar = await Car.findByIdAndUpdate(car._id, car, {new: true})
+            const updatedCar = await Car.findByIdAndUpdate(car._id, {
+                registration_number: car.registration_number,
+                color: car.color,
+                model: car.model,
+                brand: car.brand,
+            }, {
+                new: true,
+                useFindAndModify: false
+            }, )
             const transport = await Transport.findByIdAndUpdate(req.params.id, {
                 departure_time,
                 departure_city,
@@ -116,7 +125,10 @@ module.exports = {
                 price,
                 passengers,
                 passenger_package,
-            }, {new: true})
+            }, {
+                new: true,
+                useFindAndModify: false
+            })
 
             res.status(200).json({
                 message: "Successfuly updated a transport"
