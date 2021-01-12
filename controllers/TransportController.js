@@ -30,7 +30,13 @@ module.exports = {
         try {
             const transportId = req.params.id
             const transport = await Transport.findById(transportId).populate([{
-                path: 'car',
+                path: 'car', populate: [{
+                    path: 'model'
+                }, {
+                    path: 'brand'
+                }, {
+                    path: 'color'
+                }]
             }, {
                 path: 'departure_city'
             }, {
@@ -110,7 +116,7 @@ module.exports = {
 
             const transport = await Transport.findById(req.params.id)
             if (transport.users[0]._id == req.user.id) {
-                
+
                 const updatedCar = await Car.findByIdAndUpdate(car._id, {
                     registration_number: car.registration_number,
                     color: car.color,
@@ -121,7 +127,7 @@ module.exports = {
                     useFindAndModify: false
                 }, )
 
-                transport.update({
+                const updatedTransport = await Transport.findByIdAndUpdate(req.params.id, {
                     departure_time,
                     departure_city,
                     arrival_time,
@@ -129,10 +135,10 @@ module.exports = {
                     price,
                     passengers,
                     passenger_package,
-                })
-    
+                }, {new: true, useFindAndModify: false})
+
                 res.status(200).json({
-                    message: "Successfuly updated a transport"
+                    message: "Successfuly updated a transport",
                 })
             } else {
                 throw Error('Cannot update if not owner')
@@ -147,7 +153,7 @@ module.exports = {
     async delete(req, res) {
         try {
             const transport = await Transport.findById(req.params.id);
-            if(transport.users[0]._id == req.user.id) {
+            if (transport.users[0]._id == req.user.id) {
                 const deletedCar = await Car.findByIdAndDelete(transport.car._id)
                 const deletedTransport = await transport.deleteOne()
                 res.status(200).json({
@@ -166,14 +172,12 @@ module.exports = {
         try {
             const userId = req.user.id
             const transport = await Transport.findById(req.params.id);
-            if(transport.users[0]._id !== userId) {
+            if (transport.users[0]._id !== userId) {
                 const transportUsers = transport.users.filter(user => user._id == userId)
-                if(transportUsers.length > 0) {
-                    console.log(transportUsers)
+                if (transportUsers.length > 0) {
                     throw Error
                 } else {
                     transport.users.push(userId);
-                    console.log(transport.users);
                     transport.save();
                     res.status(200).json({
                         message: "Successfuly added user to a transport"
@@ -186,5 +190,28 @@ module.exports = {
                 message: "Error updating transport"
             });
         }
-    }
+    },
+        async leaveSingle(req, res) {
+            try {
+                const userId = req.user.id
+                const transport = await Transport.findById(req.params.id);
+                if (transport.users[0]._id !== userId) {
+                    const transportUsers = transport.users.filter(user => user._id == userId)
+                    if (transportUsers.length == 0) {
+                        throw Error
+                    } else {
+                        transport.users.pop(userId);
+                        transport.save();
+                        res.status(200).json({
+                            message: "Successfuly removed user from transport"
+                        })
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+                res.send({
+                    message: "Error updating transport"
+                });
+            }
+        }
 }
