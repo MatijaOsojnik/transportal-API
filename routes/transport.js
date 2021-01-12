@@ -15,9 +15,8 @@ router.post("/", passport.authenticate("jwt", {
     session: false
 }), TransportController.post)
 
-
 router.put("/:id", TransportController.put)
 
-// router.delete("/",  TransportController.delete)
+router.delete("/:id",  TransportController.delete)
 
 module.exports = router;
