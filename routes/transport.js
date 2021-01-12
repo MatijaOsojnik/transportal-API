@@ -15,7 +15,9 @@ router.post("/", passport.authenticate("jwt", {
     session: false
 }), TransportController.post)
 
-router.put("/:id", TransportController.put)
+router.put("/:id", passport.authenticate("jwt", {
+    session: false
+}), TransportController.put)
 
 router.put("/user/:id", passport.authenticate("jwt", {
     session: false

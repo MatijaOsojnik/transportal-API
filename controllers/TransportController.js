@@ -108,31 +108,36 @@ module.exports = {
                 passenger_package,
             } = req.body;
 
-            const updatedCar = await Car.findByIdAndUpdate(car._id, {
-                registration_number: car.registration_number,
-                color: car.color,
-                model: car.model,
-                brand: car.brand,
-            }, {
-                new: true,
-                useFindAndModify: false
-            }, )
-            const transport = await Transport.findByIdAndUpdate(req.params.id, {
-                departure_time,
-                departure_city,
-                arrival_time,
-                arrival_city,
-                price,
-                passengers,
-                passenger_package,
-            }, {
-                new: true,
-                useFindAndModify: false
-            })
+            const transport = await Transport.findById(req.params.id)
+            if (transport.users[0]._id == req.user.id) {
+                
+                const updatedCar = await Car.findByIdAndUpdate(car._id, {
+                    registration_number: car.registration_number,
+                    color: car.color,
+                    model: car.model,
+                    brand: car.brand,
+                }, {
+                    new: true,
+                    useFindAndModify: false
+                }, )
 
-            res.status(200).json({
-                message: "Successfuly updated a transport"
-            })
+                transport.update({
+                    departure_time,
+                    departure_city,
+                    arrival_time,
+                    arrival_city,
+                    price,
+                    passengers,
+                    passenger_package,
+                })
+    
+                res.status(200).json({
+                    message: "Successfuly updated a transport"
+                })
+            } else {
+                throw Error('Cannot update if not owner')
+            }
+
         } catch (e) {
             res.send({
                 message: "Error updating Transport"
@@ -142,11 +147,15 @@ module.exports = {
     async delete(req, res) {
         try {
             const transport = await Transport.findById(req.params.id);
-            const deletedCar = await Car.findByIdAndDelete(transport.car._id)
-            const deletedTransport = await transport.deleteOne()
-            res.status(200).json({
-                message: "Successfuly updated a transport"
-            })
+            if(transport.users[0]._id == req.user.id) {
+                const deletedCar = await Car.findByIdAndDelete(transport.car._id)
+                const deletedTransport = await transport.deleteOne()
+                res.status(200).json({
+                    message: "Successfuly updated a transport"
+                })
+            } else {
+                throw Error('Cannot delete transport if not owner');
+            }
         } catch (error) {
             res.send({
                 message: "Error deleting Transport"
